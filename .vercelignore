@@ -1,0 +1,7 @@
+node_modules
+artifacts
+browser
+test
+docs
+.superpowers
+.openai

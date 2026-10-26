@@ -1,0 +1,496 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#f7f4eb" />
+    <meta
+      name="description"
+      content="Run a little café. Experiment with queues, staffing, and patience. Discover what makes a wait worth it."
+    />
+    <title>The Waiting Game — A little café, a big experiment</title>
+    <link
+      rel="icon"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23eb663d'/%3E%3Ctext x='12' y='47' font-size='42'%3E☕%3C/text%3E%3C/svg%3E"
+    />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <a class="skip" href="#play">Skip to café controls</a>
+    <header class="site-header wrap">
+      <a class="brand" href="./" aria-label="The Waiting Game home"
+        ><span class="brand-icon" aria-hidden="true">♧</span> THE WAITING
+        GAME<span class="edition">CAFÉ EDITION</span></a
+      >
+      <nav aria-label="Page sections">
+        <a href="#playground">Playground</a
+        ><a href="#experiments"
+          >Little experiments <span aria-hidden="true">↗</span></a
+        ><a href="#how-it-works" class="about-link">How it works</a>
+      </nav>
+    </header>
+    <main class="wrap">
+      <section class="intro">
+        <div>
+          <p class="eyebrow">
+            <span class="tiny-dot"></span> A LITTLE CAFÉ. A BIG EXPERIMENT.
+          </p>
+          <h1>Good coffee.<br /><span>Worth the wait?</span></h1>
+          <p class="intro-copy">
+            More customers. Another barista. One line instead of two.<br
+              class="desktop-br"
+            />
+            A latte ordered as coffee. One sugar too many. Nolal? Pull up a
+            chair and find out.
+          </p>
+        </div>
+        <div class="intro-note">
+          <svg viewBox="0 0 90 70" aria-hidden="true">
+            <path
+              d="M22 22h40v23c0 17-40 17-40 0zM62 26h6c18 0 15 23-6 19M14 61h57M31 13c-7-9 9-6 2-13M48 13c-7-9 9-6 2-13"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="3"
+              stroke-linecap="round"
+            /></svg
+          ><span>A small lesson in<br />making room.</span>
+        </div>
+      </section>
+      <section id="playground" aria-label="Café playground" class="playground">
+        <div class="cafe-column">
+          <div class="scene-card">
+            <div class="scene-heading">
+              <div>
+                <span class="live-dot"></span
+                ><span id="status">Ready when you are</span>
+              </div>
+              <div class="clock-wrap">
+                <span id="clock">00:00</span><span> / 20 min open</span>
+              </div>
+            </div>
+            <div
+              id="scene"
+              role="img"
+              aria-label="Café is ready. No customers yet."
+            ></div>
+            <div class="scene-bottom">
+              <span id="scene-note"
+                >Your first customers are just around the corner.</span
+              >
+              <div class="legend">
+                <span><i class="mint"></i>Being served</span
+                ><span><i class="coral"></i>Waiting</span
+                ><span><i class="remake-color"></i>Remaking</span>
+              </div>
+            </div>
+          </div>
+          <div class="playback">
+            <button id="play" class="primary">Open the café</button
+            ><button
+              id="restart"
+              class="icon-button"
+              title="Restart with the same customers"
+              aria-label="Restart with the same customers"
+            >
+              ↺
+            </button>
+            <div class="speed-control">
+              <label for="speed">Speed</label
+              ><select id="speed">
+                <option value="1">1×</option>
+                <option value="5">5×</option>
+                <option value="20" selected>20×</option>
+              </select>
+            </div>
+            <button id="finish" class="text-button">
+              Finish run <span aria-hidden="true">→</span>
+            </button>
+          </div>
+          <div class="counter-stories">
+            <p class="eyebrow">OVERHEARD AT THE COUNTER</p>
+            <p id="story-current" role="status">
+              A fresh pot. Plenty of room for human error.
+            </p>
+            <details>
+              <summary>Recent café moments</summary>
+              <ol id="stories"></ol>
+            </details>
+          </div>
+          <div class="metrics" aria-label="Live café results">
+            <div>
+              <span class="metric-label">COFFEES SERVED</span
+              ><strong id="served">0</strong><small>drinks handed over</small>
+            </div>
+            <div>
+              <span class="metric-label">IN THE QUEUE</span
+              ><strong id="waiting">0</strong
+              ><small>waiting for a barista</small>
+            </div>
+            <div>
+              <span class="metric-label">AVERAGE WAIT</span
+              ><strong id="mean-wait">—</strong
+              ><small>customers who started service</small>
+            </div>
+            <div>
+              <span class="metric-label">LONGEST WAIT</span
+              ><strong id="max-wait">—</strong
+              ><small>customers who started service</small>
+            </div>
+            <div>
+              <span class="metric-label">LEFT THE LINE</span
+              ><strong id="left">0</strong><small>before being served</small>
+            </div>
+          </div>
+          <div class="quality-results" aria-label="Order outcomes">
+            <div>
+              <strong id="correct">0</strong><span>got what they intended</span>
+            </div>
+            <div>
+              <strong id="accepted">0</strong
+              ><span>said “nolal” &amp; kept it</span>
+            </div>
+            <div>
+              <strong id="remakes">0</strong><span>remakes requested</span>
+            </div>
+            <div>
+              <strong id="total-time">—</strong
+              ><span>average arrival → final drink</span>
+            </div>
+          </div>
+          <p class="quality-footnote">
+            Intended + accepted = served. Remakes take another drink’s worth of
+            barista time. Queue waits above stop when service starts.
+          </p>
+          <p id="run-announcement" class="sr-only" aria-live="polite"></p>
+        </div>
+        <aside class="settings-card" aria-labelledby="settings-heading">
+          <div class="panel-heading">
+            <h2 id="settings-heading">Make it your café</h2>
+            <span class="sliders-icon" aria-hidden="true">☷</span>
+          </div>
+          <p class="panel-description">Change a little. See what happens.</p>
+          <p id="locked-note" class="setting-note" hidden></p>
+          <div class="setting">
+            <label for="baristas"
+              >Baristas <span id="staff-value">2 people</span></label
+            ><select id="baristas">
+              <option value="1">1 barista</option>
+              <option value="2" selected>2 baristas</option>
+              <option value="3">3 baristas</option>
+              <option value="4">4 baristas</option>
+            </select>
+          </div>
+          <div class="setting">
+            <label for="rate"
+              >Customers arriving
+              <output id="rate-value" for="rate">2 / min</output></label
+            ><input
+              id="rate"
+              type="range"
+              min="0.5"
+              max="4"
+              step="0.5"
+              value="2"
+            />
+            <div class="range-ends">
+              <span>A quiet morning</span><span>Quite a rush</span>
+            </div>
+          </div>
+          <div class="setting inline-setting">
+            <label for="pattern">Arrival pattern</label
+            ><select id="pattern">
+              <option value="steady">Evenly spaced</option>
+              <option value="unpredictable" selected>Unpredictable</option>
+            </select>
+          </div>
+          <div class="setting">
+            <label for="service"
+              >Average drink time
+              <output id="service-value" for="service">45 sec</output></label
+            ><input
+              id="service"
+              type="range"
+              min="30"
+              max="150"
+              step="15"
+              value="45"
+            />
+            <div class="range-ends">
+              <span>Quick espresso</span><span>Something fancy</span>
+            </div>
+          </div>
+          <div class="setting inline-setting">
+            <label for="variability">Drink variety</label
+            ><select id="variability">
+              <option value="low">All take the same time</option>
+              <option value="high" selected>Quick &amp; slow drinks</option>
+            </select>
+          </div>
+          <fieldset class="setting policy-setting">
+            <legend>How do they queue?</legend>
+            <div class="segmented">
+              <button type="button" data-policy="shared" aria-pressed="true">
+                <span aria-hidden="true">☷</span> One shared line</button
+              ><button
+                type="button"
+                data-policy="separate"
+                aria-pressed="false"
+              >
+                <span aria-hidden="true">☷ ☷</span> Separate lines
+              </button>
+            </div>
+            <p id="policy-note">Next in line goes to the next free barista.</p>
+          </fieldset>
+          <div class="setting inline-setting">
+            <label for="patience">Customer patience</label
+            ><select id="patience">
+              <option value="120">2 minutes</option>
+              <option value="300" selected>5 minutes</option>
+              <option value="600">10 minutes</option>
+              <option value="Infinity">They’ll wait forever</option>
+            </select>
+          </div>
+          <fieldset class="setting nolal-setting">
+            <legend>A little human error</legend>
+            <label for="mistakes"
+              >Order mix-ups <output id="mistakes-value">15%</output></label
+            >
+            <input
+              id="mistakes"
+              type="range"
+              min="0"
+              max="40"
+              step="5"
+              value="15"
+              aria-describedby="mixup-help"
+            />
+            <p id="mixup-help">
+              Sometimes the barista loses count. Sometimes the customer orders
+              the wrong thing.
+            </p>
+            <label for="nolal"
+              >Nolal allowance <output id="nolal-value">60%</output></label
+            >
+            <input
+              id="nolal"
+              type="range"
+              min="0"
+              max="100"
+              step="10"
+              value="60"
+              aria-describedby="nolal-help"
+            />
+            <div class="range-ends">
+              <span>“Please redo it.”</span><span>“Eh, I’ll take it.”</span>
+            </div>
+            <p id="nolal-help">
+              “Nolal” means “eh, I’ll take it.” This sets the chance a customer
+              accepts a mix-up. Everyone else asks for one remake. Faster isn’t
+              always the drink they wanted.
+            </p>
+          </fieldset>
+          <details class="replay-settings">
+            <summary>
+              Customer seed &amp; replay <span aria-hidden="true">↻</span>
+            </summary>
+            <label for="seed">Customer seed</label>
+            <div class="seed-row">
+              <input
+                id="seed"
+                type="number"
+                min="0"
+                max="4294967295"
+                step="1"
+                value="42"
+              /><button id="new-seed" type="button">New customers</button>
+            </div>
+            <p>
+              Same seed and demand settings, same customers and mix-up
+              tendencies. New customers are staged until you start a new run.
+            </p>
+          </details>
+          <p id="pending" class="pending" aria-live="polite">
+            Settings apply when you open the café.
+          </p>
+          <button id="apply-settings" class="dark-button" hidden>
+            Start new run with changes
+          </button>
+          <p id="error" class="error" role="alert"></p>
+        </aside>
+      </section>
+      <section
+        id="challenge-panel"
+        class="challenge-panel"
+        hidden
+        aria-labelledby="challenge-title"
+      >
+        <div>
+          <p class="eyebrow" id="challenge-tag"></p>
+          <h2 id="challenge-title"></h2>
+          <p id="challenge-instruction"></p>
+          <button id="another-day" class="outline-button" hidden>
+            Try another day’s customers →
+          </button>
+          <p id="challenge-result" aria-live="polite"></p>
+          <div id="answer-controls" hidden>
+            <label for="answer" id="answer-label">What did you notice?</label
+            ><select id="answer"></select
+            ><button id="check-answer" class="dark-button">
+              Check my answer
+            </button>
+          </div>
+        </div>
+        <button id="exit-challenge" class="text-button">
+          Back to playground ×
+        </button>
+      </section>
+      <section class="results-section" aria-labelledby="results-heading">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">A CLOSER LOOK</p>
+            <h2 id="results-heading">Every wait tells a story.</h2>
+          </div>
+          <button id="pin" class="outline-button" disabled>
+            ＋ Pin this run to compare
+          </button>
+        </div>
+        <div class="results-grid">
+          <div class="chart-card">
+            <div class="chart-heading">
+              <h3>The line over time</h3>
+              <span id="chart-phase">Live queue length</span>
+            </div>
+            <svg
+              id="queue-chart"
+              viewBox="0 0 640 160"
+              role="img"
+              aria-label="No customers yet"
+            ></svg>
+            <p id="chart-text">
+              Open the café to see the line grow and shrink.
+            </p>
+          </div>
+          <div class="takeaway">
+            <span class="takeaway-icon" aria-hidden="true">✳</span>
+            <p class="eyebrow">SOMETHING TO NOTICE</p>
+            <h3 id="takeaway-title">
+              A little breathing room goes a long way.
+            </h3>
+            <p id="takeaway-copy">
+              When every barista is busy, even a small cluster of arrivals can
+              create a long line. Try adding one person and replaying the same
+              customers.
+            </p>
+          </div>
+        </div>
+        <div id="comparison" class="comparison" hidden>
+          <div class="comparison-heading">
+            <h3 id="comparison-title">Your run, up close</h3>
+            <span id="comparison-note"></span>
+          </div>
+          <div class="table-scroll">
+            <table>
+              <caption class="sr-only">
+                Completed run measurements and pinned baseline
+              </caption>
+              <thead>
+                <tr>
+                  <th scope="col">What happened</th>
+                  <th scope="col" id="baseline-label">Pinned run</th>
+                  <th scope="col">This run</th>
+                </tr>
+              </thead>
+              <tbody id="comparison-body"></tbody>
+            </table>
+          </div>
+          <p class="metric-explanation">
+            Wait statistics describe customers who were served. Departures have
+            their own waiting average. “Nolal” means accepted, not correct. Time
+            to final drink includes service and any remake. Barista utilization
+            counts only the 20 minutes open; the café then finishes its
+            remaining customers.
+          </p>
+        </div>
+        <div id="history" class="history"></div>
+      </section>
+      <section id="experiments" aria-labelledby="experiments-heading">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">FOLLOW YOUR CURIOSITY</p>
+            <h2 id="experiments-heading">Four little experiments.</h2>
+          </div>
+          <span class="section-note"
+            >No high scores. Just “oh, that’s why.”</span
+          >
+        </div>
+        <div id="challenge-cards" class="challenge-cards"></div>
+      </section>
+      <section id="how-it-works" class="model-note">
+        <div>
+          <p class="eyebrow">A TOY MODEL. A REAL IDEA.</p>
+          <h2>People aren’t averages.<br />Neither are their waits.</h2>
+        </div>
+        <div>
+          <p>
+            This café is a small experiment in queues, not a staffing forecast.
+            Everyone wants one drink; some orders need a remake. Baristas work
+            at the same speed. We leave out payment, walking, breaks, and a
+            hundred other real-life details.
+          </p>
+          <details>
+            <summary>What’s happening under the counter?</summary>
+            <p>
+              The café accepts arrivals for 20 minutes, then finishes serving
+              those who remain. Evenly spaced arrivals have fixed gaps;
+              unpredictable arrivals use random exponential gaps with the same
+              expected rate. Varied drinks take either 40% or 160% of the mean,
+              with equal probability.
+            </p>
+            <p>
+              Shared queues are first-come, first-served. For separate lines,
+              each arrival joins a shortest line (including the person being
+              served); ties rotate and nobody switches. Patience applies only
+              before service. At the exact deadline, an available barista takes
+              priority over leaving.
+            </p>
+            <p>
+              Replay uses a fixed random seed. Customers keep their own arrival
+              and drink times when staffing or queue policy changes. The
+              90th-percentile wait is the nearest-rank value: 90% of served
+              customers waited that long or less. One run is an experiment, not
+              a universal conclusion.
+            </p>
+            <p>
+              Mix-ups and willingness to accept them use separate seeded draws.
+              Half the mix-ups are ordering flusters, half barista slips. These
+              are invented probabilities, not research measurements. At handover
+              a customer either keeps the drink or asks for one
+              guaranteed-correct remake on the same barista, taking the original
+              drink time again. They do not rejoin the queue or abandon during
+              service. Drink names in stories are illustrative, not a separate
+              menu simulation. The three guided queue experiments switch mix-ups
+              off.
+            </p>
+            <p>
+              Everything runs in your browser. There are no model calls,
+              trackers, or uploaded results. Run history lasts for this page
+              visit.
+            </p>
+          </details>
+        </div>
+      </section>
+    </main>
+    <footer class="wrap">
+      <span class="footer-brand">THE WAITING GAME</span
+      ><span>Made for the joy of figuring things out.</span
+      ><a href="#playground">One more coffee? ↑</a>
+    </footer>
+    <noscript
+      ><p>
+        This interactive simulation needs JavaScript. No information is sent
+        anywhere when you play.
+      </p></noscript
+    >
+    <script type="module" src="app.js"></script>
+  </body>
+</html>

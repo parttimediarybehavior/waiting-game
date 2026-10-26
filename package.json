@@ -1,0 +1,19 @@
+{
+  "name": "the-waiting-game",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node --test test/*.test.js",
+    "test:browser": "node --test browser/*.test.mjs",
+    "browsers:install": "playwright-core install chromium"
+  },
+  "devDependencies": {
+    "playwright-core": "1.56.1"
+  },
+  "license": "MIT",
+  "engines": {
+    "node": ">=22"
+  },
+  "description": "A little caf\u00e9 playground about queues, patience and imperfect orders."
+}

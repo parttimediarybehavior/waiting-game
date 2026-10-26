@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#f7f4eb" />
+    <title>Eight seconds at the café — The Waiting Game</title>
+    <meta
+      name="description"
+      content="An eight-second look at The Waiting Game: watch the café, then compare the cost of accepting a wrong drink."
+    />
+    <link rel="stylesheet" href="style.css" />
+    <style>
+      .demo {
+        max-width: 1100px;
+        margin: 48px auto;
+        padding: 0 24px;
+      }
+      .demo h1 {
+        font-size: clamp(32px, 6vw, 60px);
+        margin: 24px 0;
+      }
+      .demo video {
+        display: block;
+        width: 100%;
+        border: 1px solid #d9dccd;
+        border-radius: 12px;
+        margin: 24px 0;
+        background: #f7f4eb;
+      }
+      .demo p {
+        max-width: 760px;
+        line-height: 1.7;
+        margin: 20px 0;
+      }
+      .demo a {
+        text-decoration: underline;
+      }
+    </style>
+  </head>
+  <body>
+    <main class="demo">
+      <a href="./">← Play The Waiting Game</a>
+      <h1>Eight seconds at the café.</h1>
+      <p>
+        Watch a little coffee rush, then compare two versions of the same day.
+        “Nolal” means “eh, I’ll take it.” What happens when everyone accepts a
+        mix-up?
+      </p>
+      <video
+        controls
+        playsinline
+        preload="none"
+        poster="media/demo-poster.png"
+        aria-label="Eight-second café demo"
+        aria-describedby="demo-description"
+      >
+        <source src="media/waiting-game-demo.mp4" type="video/mp4" />
+        <a href="media/waiting-game-demo.mp4">Download the eight-second demo</a
+        >.
+      </video>
+      <p id="demo-description">
+        Silent demo: customers queue and collect drinks during 20× playback. The
+        view then cuts to a completed comparison. Remaking every mix-up gives 44
+        people their intended drink and 9 walkouts. Accepting every mix-up gives
+        39 intended drinks, 14 accepted wrong drinks and no walkouts. These are
+        results from one synthetic day.
+      </p>
+      <p>
+        <a href="./#experiments">Try the nolal experiment</a> ·
+        <a href="https://github.com/parttimediarybehavior/waiting-game"
+          >Read the source</a
+        >
+      </p>
+    </main>
+  </body>
+</html>
